@@ -1,3 +1,4 @@
+import { useCallback, useState, useEffect } from 'react';
 import './App.css';
 
 /* Link: Launch
@@ -19,10 +20,24 @@ x deletes item
 */
 
 function App() {
+  const [planets, setPlanets] = useState([]);
+
+  const fetchMyAPI = useCallback(async () => {
+    let response = await fetch('http://localhost:5000/planets');
+    response = await response.json();
+    console.log('API response', response);
+    setPlanets(response);
+  }, []);
+
+  useEffect(() => {
+    fetchMyAPI();
+  }, [fetchMyAPI]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>React App</h1>
+    <div className='App'>
+      <header className='App-header'>
+        <h1>NASA Project</h1>
+        <p>Planets: {planets}</p>
       </header>
     </div>
   );
