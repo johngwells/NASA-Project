@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 
 /* Link: Launch
@@ -21,23 +21,24 @@ x deletes item
 
 function App() {
   const [planets, setPlanets] = useState([]);
-
-  const fetchMyAPI = useCallback(async () => {
-    let response = await fetch('http://localhost:5000/planets');
-    response = await response.json();
-    console.log('API response', response);
-    setPlanets(response);
-  }, []);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const fetchMyAPI = async () => {
+      let response = await fetch('http://localhost:5000/planets');
+      response = await response.json();
+      console.log('API response', response);
+      setPlanets(response);
+      setIsLoading(false);
+    };
     fetchMyAPI();
-  }, [fetchMyAPI]);
-
+  }, []);
+  
   return (
     <div className='App'>
       <header className='App-header'>
         <h1>NASA Project</h1>
-        <p>Planets: {planets}</p>
+        <p>Planets With Possible of Life: {isLoading ? 'loading...' : planets[0]['kepler_name']}</p>
       </header>
     </div>
   );
